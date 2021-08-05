@@ -19,6 +19,12 @@ const Details = (props) => {
 
     // TODO: Create state variables to hold full lists of food and exercise
     // Initialize them as empty arrays.
+    const [exerciseList, setExerciseList] = useState({
+        list: []
+    });
+    const [foodList, setFoodList] = useState({
+        list: []
+    });
 
 
     // Steps input handler (note e = event)
@@ -73,12 +79,15 @@ const Details = (props) => {
             cal: userInput.inputFoodCalories
         };
         // TODO: use prevState to add the new entry to the food list (once you've created it later)
-        
+        setFoodList((prevState) => {
+            return { list: [...prevState.list, newFoodEntry] };
+        })
         // TODO: call the update handler via props and pass in the calories
         props.updateFood(userInput.inputFoodCalories);
         // TODO: reset the food desc and cal input values to an empty string
-        userInput.inputFoodCalories = '';
-        userInput.inputFoodDescription = '';
+        setUserInput((prevState) => {
+            return { ...prevState, inputFoodDescription: '', inputFoodCalories: '' }
+        });
     }
 
     // Exercise input handlers
@@ -86,27 +95,36 @@ const Details = (props) => {
         e.preventDefault();
         let desc = e.target.value;
         // TODO: set the new value in state
-        
+        setUserInput((prevState) => {
+            return { ...prevState, inputExerciseDescription: desc };
+        });
     }
     const handleExerciseCalChange = e => {
         e.preventDefault();
         let amount = Number(e.target.value);
         // TODO: set the new value in state
-        
+        setUserInput((prevState) => {
+            return { ...prevState, inputExerciseCalories: amount };
+        })
     }
     const handleSubmitExercise = e => {
         e.preventDefault();
         let newExerciseEntry = {
             id: uuid(),
             // TODO: Add desc & cal properties with values from state
-            
+            desc: userInput.inputExerciseDescription,
+            cal: userInput.inputExerciseCalories
         }
         // TODO: use prevState to add the new entry to the exercise list (once you've created it later)
-        
+        setExerciseList((prevState) => {
+            return { list: [...prevState.list, newExerciseEntry] };
+        });
         // TODO: call the update handler via props and pass in the calories from newExerciseEntry
-        
+        props.updateExercise(newExerciseEntry.cal);
         // TODO: reset the exercise desc and cal input values to an empty string
-        
+        setUserInput((prevState) => {
+            return { ...prevState, inputExerciseDescription: '', inputExerciseCalories: '' };
+        });
     }
 
     // Small helper components like this don't need a separate file
@@ -197,7 +215,7 @@ const Details = (props) => {
                 <div>
                     <p className="details-header">FOOD & BEVERAGE LOG</p>
                     {/* TODO: Add the DetailsTable component and pass in the food list using the attribute 'list' */}
-                    
+                    <DetailsTable list={ foodList.list }/>
                 </div>
             </div>}
 
@@ -214,7 +232,7 @@ const Details = (props) => {
                 <div>
                     <p className="details-header">EXERCISE LOG</p>
                     {/* TODO: Add the DetailsTable component and pass in the exercise list using the attribute 'list' */}
-                    
+                    <DetailsTable list={ exerciseList.list }/>
                 </div>
             </div>}
 

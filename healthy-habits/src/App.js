@@ -38,8 +38,11 @@ function App() {
         });
     };
     const handleUpdateExercise = (amount) => {
-        // You'll need to update both the food calories and the net calories here (subtract calories burned). Use prevState to ensure you are adding the new amount to the existing total. 
-
+        // You'll need to update both the calories burned and the net calories here (subtract calories burned). Use prevState to ensure you are adding the new amount to the existing total.
+        setUserInput((prevState) => {
+            // subtract net calories and add exercise calories
+            return { ...prevState, enteredExercise: userInput.enteredExercise+=amount, net: userInput.net-=amount };
+        });
     };
 
     // TODO: Change the current type of details to be displayed.
@@ -97,7 +100,7 @@ function App() {
             
             {/* TODO: Pass the current type into the Details component */}
             {/* TODO: Pass the four update handler functions to the Details component below. Check the propTypes object at the bottom of Details.js to get the prop names, then look just below the state variables in this file to get the names of the handler functions. */}
-            <Details type={ type } updateSteps={ handleUpdateSteps } updateWater={ handleUpdateWater } updateFood={ handleUpdateFood }/>
+            <Details type={ type } updateSteps={ handleUpdateSteps } updateWater={ handleUpdateWater } updateFood={ handleUpdateFood } updateExercise={ handleUpdateExercise }/>
             
         </div>
     );
